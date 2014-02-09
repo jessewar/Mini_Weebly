@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>UI</title>
+
+    <!-- jQuery Core -->
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+
+    <!-- Twitter Bootstrap -->
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css">
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+
+    <!-- jQuery Toggles-->
+    <script src="Scripts/mobile/toggles.js"></script>
+    <link href="Content/toggles.css" rel="stylesheet" />
+    <link href="Content/toggles-modern.css" rel="stylesheet" />
+
+    <!-- local styles-->
+    <style>
+        .templatesHeader, .elementsHeader, .settingsHeader {
+            background-color: lightblue;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        .pageHeader {
+            margin: 5px;
+        }
+        .banner {
+            background-color:aliceblue;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $('.toggle').toggles({ click: false });
+        });
+    </script>
+
+    <!--start html 5 drag and drop-->
+    <style>
+        #div1 {
+            width: 50%;
+            height: 70px;
+            padding: 10px;
+            border: 1px solid #aaaaaa;
+        }
+    </style>
+    <script>
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("Text", ev.target.id);
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("Text");
+            ev.target.appendChild(document.getElementById(data));
+        }
+    </script>
+    <!--end html 5 drag and drop -->
+</head>
+<body>
+    <div class="container">
+        <div class="row banner">
+            Banner goes here
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <div class="templates">
+                    <div class="templatesHeader">
+                        <span>TEMPLATES</span>
+                    </div>
+                    <div id="edit" contenteditable="true">
+                        <button>PAGE 1</button>
+                    </div>
+                    <button>Add Page</button>
+                </div>
+                <div class="elements">
+                    <div class="elementsHeader"><span>ELEMENTS</span></div>
+                    <table style="width:100%">
+                        <tr>
+                            <td>
+                                <img id="drag3" src="http://www.w3schools.com/html/img_logo.gif" draggable="true" ondragstart="drag(event)" width="50" height="50">
+                            </td>
+                            <td>
+                                <img id="drag2" src="http://www.w3schools.com/html/img_logo.gif" draggable="true" ondragstart="drag(event)" width="50" height="50">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img id="drag1" src="http://www.w3schools.com/html/img_logo.gif" draggable="true" ondragstart="drag(event)" width="50" height="50">
+                            </td>
+                            <td>
+                                <img id="drag4" src="http://www.w3schools.com/html/img_logo.gif" draggable="true" ondragstart="drag(event)" width="50" height="50">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="settings">
+                    <div class="settingsHeader"><span>SETTINGS</span></div>
+                    <table style="width:100%">
+                        <tr>
+                            <td width="50%">
+                                Grid Lines
+                            </td>
+                            <td>
+                                <div class="toggle-modern">
+                                    <div>
+                                        <div class="toggle noclick" style="width:80px">
+                                            <div class="toggle-slide">
+                                                <div class="toggle-inner" style="width: 118px; margin-left: -48px;">
+                                                    <div class="toggle-on" style="height: 22px; width: 59px; text-align: center; text-indent: -11px; line-height: 22px;">ON</div>
+                                                    <div class="toggle-blob" style="height: 22px; width: 22px; margin-left: -11px;"></div>
+                                                    <div class="toggle-off active" style="height: 22px; width: 59px; margin-left: -11px; text-align: center; text-indent: 11px; line-height: 22px;">OFF</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+                <div>
+
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div class="pageHeader">
+                    <div class="page">
+                        <button>PAGE 1</button>
+                    </div>
+                </div>
+                <div style="border:solid">
+                    <p>Drag the image into the rectangle:</p>
+                    <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                    <br>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
