@@ -38,7 +38,7 @@
             <h3>
               Templates
             </h3>
-            <input type="text" class="form-control" placeholder="Add New Page +" id="new-page-input">
+            <input id="new-page-input" type="text" class="form-control" placeholder="Add New Page +">
             <hr>
             <!-- Elements section -->
             <h3>
@@ -78,8 +78,14 @@
             <h3>
               Page list
             </h3>
+            <ul id="pages">
+              <li>
+                <h3><span class="label label-default">PAGE</span></h3>
+              </li>
+            </ul>
             <hr>
           </div>
+          
           <!-- Current webpage section -->
           <div class="container">
           </div>
@@ -110,7 +116,8 @@
         console.log($('#new-page-input'));
 
         $('#new-page-input').on('click', function(e) {
-          alert("hi");
+          var newPage = "<li><h3><span class='label label-default'>PAGE</span></h3></li>";
+          $('#pages').append(newPage);
         });
       });
     </script>
