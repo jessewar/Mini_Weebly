@@ -25,10 +25,12 @@
         margin-right: 5px;
       }
 
-      #page-template
+      .page-template
       {
-        width: 100%;
         margin-bottom: 10px;
+        display: block;  /* span elements inline by default */
+        height: 34px; /* TODO: change height and font-size to less stringent values */
+        font-size: 14px;
       }
       
     </style>
@@ -50,7 +52,8 @@
             <h3>
               Templates
             </h3>
-            <a id="page-template" href="#" class="btn btn-default">PAGE</a>
+            <span class="label label-default page-template">PAGE</span>
+            <a href="#" class="btn btn-default page-template">PAGE</a>
             <input id="new-page-input" type="text" class="form-control" placeholder="Add New Page +">
             <hr>
             <!-- Elements section -->
@@ -133,13 +136,15 @@
         $newPageInput.on('click', function(e) {
           // generate new page label with every new page creation
           var $pageList = $('#pages');
-          var $pageName = $newPageInput.val();
-          var pageListElement = "<li><h3><span class='label label-default page-label'>" + $pageName + "</span></h3></li>";
+          var pageName = $newPageInput.val();
+          var pageListElement = "<li><h3><span class='label label-default page-label'>" + pageName + "</span></h3></li>";
           $pageList.append(pageListElement);
-          $newPageInput.val("");
 
           // generate new page template item every new page creation
-          
+          var pageTemplateItem = "<span class='label label-default page-template'>" + pageName + "</span>";
+          $newPageInput.before(pageTemplateItem);
+
+          $newPageInput.val("");
         });
       });
     </script>
