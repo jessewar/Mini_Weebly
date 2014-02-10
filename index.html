@@ -115,26 +115,31 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    <script src="jquery.iconfield-master/jquery.iconfield.js"></script>
+    <script src="public/js/jquery.iconfield-master/jquery.iconfield.js"></script>
 
     <script>
       // get "+" icon for new page input area
       // TODO: Make only the icon a button
       $(function() {
-        $('#new-page-input').iconfield({
+        var $newPageInput = $('#new-page-input');
+
+        $newPageInput.iconfield({
           'image-url' : 'public/imgs/search.jpg',
           'horizontal-padding' : 10, // TODO: see if this causes an issue for different screen sizes
           'left' : false
         });
 
-        // generate new page label with every new page creation
-        $('#new-page-input').on('click', function(e) {
-          var pageList = $('#pages');
-          var pageName = $('#new-page-input').val();
-          var pageListElement = "<li><h3><span class='label label-default page-label'>" + pageName + "</span></h3></li>";
-          pageList.append(pageListElement);
-          $('#new-page-input').val("");
+        // handle new page creation
+        $newPageInput.on('click', function(e) {
+          // generate new page label with every new page creation
+          var $pageList = $('#pages');
+          var $pageName = $newPageInput.val();
+          var pageListElement = "<li><h3><span class='label label-default page-label'>" + $pageName + "</span></h3></li>";
+          $pageList.append(pageListElement);
+          $newPageInput.val("");
 
+          // generate new page template item every new page creation
+          
         });
       });
     </script>
