@@ -1,0 +1,18 @@
+#pages
+{
+  list-style-type: none;
+}
+
+.page-button
+{
+  float: left;
+  margin-right: 5px;
+}
+
+.page-template
+{
+  margin-bottom: 10px;
+  display: block;  /* span elements inline by default */
+  height: 34px; /* TODO: change height and font-size to less stringent values */
+  font-size: 14px;
+}

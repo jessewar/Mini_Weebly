@@ -8,32 +8,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"
-    rel="stylesheet">
-    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"
-    rel="stylesheet">
 
-    <style type="text/css">
-      #pages
-      {
-        list-style-type: none;
-      }
-      
-      .page-button
-      {
-        float: left;
-        margin-right: 5px;
-      }
+    <!-- Bootstrap 3.0 CSS files -->
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
 
-      .page-template
-      {
-        margin-bottom: 10px;
-        display: block;  /* span elements inline by default */
-        height: 34px; /* TODO: change height and font-size to less stringent values */
-        font-size: 14px;
-      }
-      
-    </style>
+    <!-- My custom CSS files -->
+    <link href="public/css/index.css" rel="stylesheet">
+
 
   </head>
   
@@ -119,37 +101,7 @@
     <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <script src="public/js/jquery.iconfield-master/jquery.iconfield.js"></script>
 
-    <script>
-      // get "+" icon for new page input area
-      // TODO: Make only the icon a button
-      $(function() {
-        var $newPageInput = $('#new-page-input');
-
-        $newPageInput.iconfield({
-          'image-url' : 'public/imgs/search.jpg',
-          'horizontal-padding' : 10, // TODO: see if this causes an issue for different screen sizes
-          'left' : false
-        });
-
-        // handle new page creation
-        $newPageInput.on('click', function(e) {
-          var pageName = $newPageInput.val();
-          if (pageName !== "") {
-            // generate new page label with every new page creation
-            var $pageList = $('#pages');
-            var pageListElement = "<li><h3><a href='#' class='btn btn-default page-button'>" + pageName + "</a></h3></li>";
-            $pageList.append(pageListElement);
-
-            // generate new page template item every new page creation
-            var pageTemplateItem = "<span class='label label-default page-template'>" + pageName + "</span>";
-            $newPageInput.before(pageTemplateItem);
-            $newPageInput.val("");
-          }
-        });
-      });
-    </script>
-
-    <script src="main.js"></script>
+    <script src="public/js/main.js"></script>
   </body>
 
 </html>
