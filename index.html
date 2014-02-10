@@ -14,10 +14,17 @@
     rel="stylesheet">
 
     <style type="text/css">
-      ul
+      #pages
       {
-          list-style-type: none;
+        list-style-type: none;
       }
+      
+      .page-label
+      {
+        float: left;
+        margin-right: 5px;
+      }
+      
     </style>
 
   </head>
@@ -80,12 +87,13 @@
             </h3>
             <ul id="pages">
               <li>
-                <h3><span class="label label-default">PAGE</span></h3>
+                <h3>
+                  <span class="label label-default page-label">PAGE</span>
+                </h3>
               </li>
             </ul>
             <hr>
           </div>
-          
           <!-- Current webpage section -->
           <div class="container">
           </div>
@@ -116,7 +124,7 @@
         console.log($('#new-page-input'));
 
         $('#new-page-input').on('click', function(e) {
-          var newPage = "<li><h3><span class='label label-default'>PAGE</span></h3></li>";
+          var newPage = "<li><h3><span class='label label-default page-label'>PAGE</span></h3></li>";
           $('#pages').append(newPage);
         });
       });
