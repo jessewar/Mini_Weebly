@@ -19,7 +19,7 @@
         list-style-type: none;
       }
       
-      .page-label
+      .page-button
       {
         float: left;
         margin-right: 5px;
@@ -53,7 +53,6 @@
               Templates
             </h3>
             <span class="label label-default page-template">PAGE</span>
-            <a href="#" class="btn btn-default page-template">PAGE</a>
             <input id="new-page-input" type="text" class="form-control" placeholder="Add New Page +">
             <hr>
             <!-- Elements section -->
@@ -97,7 +96,7 @@
             <ul id="pages">
               <li>
                 <h3>
-                  <span class="label label-default page-label">PAGE</span>
+                  <a href="#" class="btn btn-default page-button">PAGE</a>
                 </h3>
               </li>
             </ul>
@@ -134,17 +133,18 @@
 
         // handle new page creation
         $newPageInput.on('click', function(e) {
-          // generate new page label with every new page creation
-          var $pageList = $('#pages');
           var pageName = $newPageInput.val();
-          var pageListElement = "<li><h3><span class='label label-default page-label'>" + pageName + "</span></h3></li>";
-          $pageList.append(pageListElement);
+          if (pageName !== "") {
+            // generate new page label with every new page creation
+            var $pageList = $('#pages');
+            var pageListElement = "<li><h3><a href='#' class='btn btn-default page-button'>" + pageName + "</a></h3></li>";
+            $pageList.append(pageListElement);
 
-          // generate new page template item every new page creation
-          var pageTemplateItem = "<span class='label label-default page-template'>" + pageName + "</span>";
-          $newPageInput.before(pageTemplateItem);
-
-          $newPageInput.val("");
+            // generate new page template item every new page creation
+            var pageTemplateItem = "<span class='label label-default page-template'>" + pageName + "</span>";
+            $newPageInput.before(pageTemplateItem);
+            $newPageInput.val("");
+          }
         });
       });
     </script>
