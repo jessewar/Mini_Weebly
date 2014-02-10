@@ -121,11 +121,14 @@
           'left' : false
         });
 
-        console.log($('#new-page-input'));
-
+        // generate new page label with every new page creation
         $('#new-page-input').on('click', function(e) {
-          var newPage = "<li><h3><span class='label label-default page-label'>PAGE</span></h3></li>";
-          $('#pages').append(newPage);
+          var pageList = $('#pages');
+          var pageName = $('#new-page-input').val();
+          var pageListElement = "<li><h3><span class='label label-default page-label'>" + pageName + "</span></h3></li>";
+          pageList.append(pageListElement);
+          $('#new-page-input').val("");
+
         });
       });
     </script>
