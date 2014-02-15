@@ -17,6 +17,55 @@
     <link href="public/css/index.css" rel="stylesheet">
 
 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"
+    >
+    </script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"
+    >
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="public/js/jquery.iconfield-master/jquery.iconfield.js"></script>
+
+    <script src="public/js/main.js"></script>
+
+    <style>
+    .hoverzone {
+      border: 2px solid #aaaaaa;
+      height: 100px;
+      width: 1000px;
+    }
+
+
+    .over {
+      border: 2px dashed #000;
+    }
+
+
+
+    </style>
+
+    <script>
+
+      function handleDragStart(ev) {
+        console.log(ev);
+        console.log("drag start");
+        ev.target.style.opacity = '0.4';  // ev.target refers to the element being dragged
+      };
+
+
+      function handleDragEnter(ev) {
+        console.log("drag entered");
+        ev.target.classList.add('over');  // ev.target refers to the element being dragged over
+      }
+
+      function handleDragLeave(ev) {
+        console.log("drag left");
+        ev.target.classList.remove('over');
+      }
+    </script>
+
   </head>
   
   <body>
@@ -37,14 +86,14 @@
             <span class="label label-default page-template">PAGE</span>
             <input id="new-page-input" type="text" class="form-control" placeholder="Add New Page +">
             <hr>
-            <!-- Elements section -->
+            <!-- Elements section --> 
             <h3>
               Elements
             </h3>
             <div class="container">
               <div class="row">
                 <div class="col-md-6">
-                  <img src="https://s3.amazonaws.com/jetstrap-site/images/website/index/what_icon.png">
+                  <img id="text" draggable="true" ondragstart="handleDragStart(event)" src="https://s3.amazonaws.com/jetstrap-site/images/website/index/what_icon.png">
                 </div>
                 <div class="col-md-6">
                   <img src="https://s3.amazonaws.com/jetstrap-site/images/website/index/what_icon.png">
@@ -85,23 +134,12 @@
           </div>
           <hr>
           <!-- Current webpage section -->
-          <div class="container">
+          <div class="container hoverzone" ondragenter="handleDragEnter(event)" ondragleave="handleDragLeave(event)">
           </div>
         </div>
       </div>
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"
-    >
-    </script>
-    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"
-    >
-    </script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    <script src="public/js/jquery.iconfield-master/jquery.iconfield.js"></script>
-
-    <script src="public/js/main.js"></script>
   </body>
 
 </html>
