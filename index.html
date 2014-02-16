@@ -47,13 +47,16 @@
     </style>
 
     <script>
+      var dragSourceElement = null;
 
       function handleDragStart(ev) {
         console.log(ev);
         console.log("drag start");
         ev.target.style.opacity = '0.4';  // ev.target refers to the element being dragged
-      };
 
+        // ev.dataTransfer.effectAllowed = 'move';  // copy, move, or link the data
+        ev.dataTransfer.setData('text', "hello");
+      };
 
       function handleDragEnter(ev) {
         console.log("drag entered");
@@ -61,8 +64,23 @@
       }
 
       function handleDragLeave(ev) {
-        console.log("drag left");
-        ev.target.classList.remove('over');
+        console.log("drag leave");
+        ev.target.classList.remove('over');  // ev.target refers to the element being dragged over
+      }
+
+      function handleDragOver(ev) {
+        ev.preventDefault();
+      }
+
+      function handleDrop(ev) {
+        console.log("dropping");
+        ev.preventDefault();
+
+        var data = ev.dataTransfer.getData('text');
+        console.log(data);
+
+        ev.target.innerHTML = ev.dataTransfer.getData('text/html');
+
       }
     </script>
 
@@ -134,7 +152,7 @@
           </div>
           <hr>
           <!-- Current webpage section -->
-          <div class="container hoverzone" ondragenter="handleDragEnter(event)" ondragleave="handleDragLeave(event)">
+          <div class="container hoverzone" ondragenter="handleDragEnter(event)" ondragleave="handleDragLeave(event)" ondragover="handleDragOver(event)" ondrop="handleDrop(event)">
           </div>
         </div>
       </div>
