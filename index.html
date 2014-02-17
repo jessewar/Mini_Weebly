@@ -37,6 +37,12 @@
       width: 1000px;
     }
 
+    .child {
+      border: 2px solid red;
+      height: 100%;
+      width: 50%;
+      float: left;
+    }
 
     .over {
       border: 2px dashed #000;
@@ -47,8 +53,53 @@
     </style>
 
     <script>
-      var dragSourceElement = null;
 
+      function createTextChild(content) {
+        var $child = $("<div>" + content + "</div>");
+        $child.addClass("child");
+
+        return $child;
+      }
+
+      function createEmptyChild() {
+        var $child = $("<div ondragover='handleDragOver(event)' ondrop='handleDrop(event)'></div>");
+        $child.addClass("child");
+
+        return $child;
+      }
+
+      function removeDndAttributes(node) {
+        if (node !== null) {
+          $(node).off();
+
+          // $(node).off("ondragenter");
+          // $(node).off("ondragleave");
+          // $(node).off("ondragover");
+        }
+      }
+
+
+      function isLeftSide(ev) {
+        var $node = $(ev.target);
+       
+        var offset = $node.offset();
+        var relX = ev.pageX - offset.left;  // X position relative to containing element
+        var relY = ev.pageY - offset.top;  // Y position relative to containing element
+        var middleX = $node.width() / 2; 
+
+        if (relX < middleX) {
+          return true; 
+        }
+        else { 
+          return false; 
+        }
+      }
+
+    </script>
+
+    <script>
+
+      // called a single time when a draggable element starts being dragged
       function handleDragStart(ev) {
         console.log(ev);
         console.log("drag start");
@@ -58,16 +109,48 @@
         ev.dataTransfer.setData('text', "hello");
       };
 
+      // called a single time when something is dragged into the hoverzone
       function handleDragEnter(ev) {
-        console.log("drag entered");
-        ev.target.classList.add('over');  // ev.target refers to the element being dragged over
+        var $node = $(ev.target);  // ev.target refers to the element being dragged over
+
+        console.log("enter");
+
+        if ($node.hasClass('hoverzone')) {  // prevent recursive splitting of children of the hoverzone
+          removeDndAttributes($node);  // this doesn't seem to do anything
+          var content = $node.text();  
+          var inLeft = isLeftSide(ev);
+
+          var $leftChild;
+          var $rightChild;
+
+          if (inLeft) {
+            $leftChild = createEmptyChild();
+            $rightChild = createTextChild(content);
+          } else {
+            $leftChild = createTextChild(content);
+            $rightChild = createEmptyChild();
+          }
+          $node.text('');
+
+          $node.append($leftChild);
+          $node.append($rightChild);
+
+          //ev.target.classList.add('over');  
+        }
       }
 
+      // called a single time when the dragged element leaves the hoverzone
       function handleDragLeave(ev) {
-        console.log("drag leave");
-        ev.target.classList.remove('over');  // ev.target refers to the element being dragged over
+        console.log("drag leave " + ev.target.classList);
+
+        var $node = $(ev.target);
+
+        $node.children().remove();
+
+        //ev.target.classList.remove('over');  // ev.target refers to the element being dragged over
       }
 
+      // called every time a drag movement occurs over an element
       function handleDragOver(ev) {
         ev.preventDefault();
       }
@@ -76,11 +159,14 @@
         console.log("dropping");
         ev.preventDefault();
 
-        var data = ev.dataTransfer.getData('text');
-        console.log(data);
+        $node = $(ev.target);  // ev.target refers to the element being dropped on
+        $node.attr('contenteditable', true);
+        $node.text('start typing here');
 
-        ev.target.innerHTML = ev.dataTransfer.getData('text/html');
 
+        // var data = ev.dataTransfer.getData('text');  
+        // console.log(data);
+        // ev.target.innerHTML = ev.dataTransfer.getData('text/html');
       }
     </script>
 
@@ -95,7 +181,7 @@
       </nav>
       <div class="row">
         <!-- Tools section -->
-        <div class="col-md-4">
+        <div class="col-md-3">
           <!-- Templates section -->
           <div class="container">
             <h3>
@@ -136,7 +222,7 @@
           </div>
         </div>
         <!-- Page builder section -->
-        <div class="col-md-8">
+        <div class="col-md-9">
           <!-- Pages list section -->
           <div class="container">
             <h3>
@@ -152,7 +238,21 @@
           </div>
           <hr>
           <!-- Current webpage section -->
-          <div class="container hoverzone" ondragenter="handleDragEnter(event)" ondragleave="handleDragLeave(event)" ondragover="handleDragOver(event)" ondrop="handleDrop(event)">
+          <div class="container hoverzone" ondragenter="handleDragEnter(event)" ondragleave="handleDragLeave(event)" ondragover="handleDragOver(event)">
+            <!-- ondrop="handleDrop(event)" -->
+            TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT 
+            TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT 
+
+
+
+<!--             TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT 
+            TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT 
+            TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT 
+            TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT 
+            TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT 
+            TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT 
+            TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT 
+            TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT -->
           </div>
         </div>
       </div>
