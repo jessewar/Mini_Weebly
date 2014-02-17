@@ -38,16 +38,22 @@
     }
 
     .child {
-      border: 2px solid red;
+      /*border: 2px solid red;*/
       height: 100%;
       width: 50%;
       float: left;
     }
 
-    .over {
-      border: 2px dashed #000;
+    .dropped-text {
+      border: 2px solid #8fc7ff;  /* match color of blue X sprite */
+      background: url('Delete-Element.png') no-repeat 0 0;
+      /*background-position: 447px -11px; */ /* horizontal position, vertical position */
+      overflow: hidden;
     }
 
+    .gridlines {
+      border-left: 4px dashed aqua;
+    }
 
 
     </style>
@@ -117,6 +123,7 @@
 
         if ($node.hasClass('hoverzone')) {  // prevent recursive splitting of children of the hoverzone
           removeDndAttributes($node);  // this doesn't seem to do anything
+
           var content = $node.text();  
           var inLeft = isLeftSide(ev);
 
@@ -130,22 +137,24 @@
             $leftChild = createTextChild(content);
             $rightChild = createEmptyChild();
           }
+          $rightChild.addClass("gridlines");  
           $node.text('');
 
           $node.append($leftChild);
           $node.append($rightChild);
-
-          //ev.target.classList.add('over');  
         }
       }
 
       // called a single time when the dragged element leaves the hoverzone
       function handleDragLeave(ev) {
         console.log("drag leave " + ev.target.classList);
+        ev.preventDefault();
 
-        var $node = $(ev.target);
+        // $(ev.target).children().removeClass('gridlines');
 
-        $node.children().remove();
+        // var $node = $(ev.target);
+
+        // $node.children().remove();
 
         //ev.target.classList.remove('over');  // ev.target refers to the element being dragged over
       }
@@ -162,6 +171,9 @@
         $node = $(ev.target);  // ev.target refers to the element being dropped on
         $node.attr('contenteditable', true);
         $node.text('start typing here');
+        $node.addClass("dropped-text");
+        var offset = $node.width() - 36 - 10;  // sprite width is 36px and sprite image horizontal offset is 10px
+        $node.css("background-position", offset + "px -11px");
 
 
         // var data = ev.dataTransfer.getData('text');  
@@ -238,7 +250,7 @@
           </div>
           <hr>
           <!-- Current webpage section -->
-          <div class="container hoverzone" ondragenter="handleDragEnter(event)" ondragleave="handleDragLeave(event)" ondragover="handleDragOver(event)">
+          <div class="hoverzone" ondragenter="handleDragEnter(event)" ondragleave="handleDragLeave(event)" ondragover="handleDragOver(event)">
             <!-- ondrop="handleDrop(event)" -->
             TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT 
             TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT 
