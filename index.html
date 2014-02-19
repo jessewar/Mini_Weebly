@@ -44,7 +44,7 @@
       float: left;
     }
 
-    .dropped-text {
+    .text_element_input {
       border: 2px solid #8fc7ff;  /* match color of blue X sprite */
       background: url('Delete-Element.png') no-repeat 0 0;
       /*background-position: 447px -11px; */ /* horizontal position, vertical position */
@@ -57,6 +57,45 @@
 
 
     </style>
+
+    <script>
+      // get "+" icon for new page input area
+      // TODO: Make only the icon a button
+      $(function() {
+        var $newPageInput = $('#new-page-input');
+
+        // put icon in page name input
+        $newPageInput.iconfield({
+          'image-url' : 'public/imgs/search.jpg',
+          'horizontal-padding' : 10, // TODO: see if this causes an issue for different screen sizes
+          'left' : false
+        });
+
+        // handle new page creation
+        $newPageInput.on('click', function(e) {
+          var pageName = $newPageInput.val();
+          if (pageName !== "") {
+            // generate new page label with every new page creation
+            var $pageList = $('#pages');
+            var pageListElement = "<li><h3><a href='#' class='btn btn-default page-button'>" + pageName + "</a></h3></li>";
+            $pageList.append(pageListElement);
+
+            // generate new page template item every new page creation
+            var pageTemplateItem = "<span class='label label-default page-template'>" + pageName + "</span>";
+            $newPageInput.before(pageTemplateItem);
+            $newPageInput.val("");
+          }
+        });
+
+
+
+        function handleDragEnter(event) {
+          console.log("drag enter");
+
+        };
+      });
+    </script>
+
 
     <script>
 
@@ -122,7 +161,7 @@
         console.log("enter");
 
         if ($node.hasClass('hoverzone')) {  // prevent recursive splitting of children of the hoverzone
-          removeDndAttributes($node);  // this doesn't seem to do anything
+          // removeDndAttributes($node);  // this doesn't seem to do anything
 
           var content = $node.text();  
           var inLeft = isLeftSide(ev);
@@ -155,8 +194,6 @@
         // var $node = $(ev.target);
 
         // $node.children().remove();
-
-        //ev.target.classList.remove('over');  // ev.target refers to the element being dragged over
       }
 
       // called every time a drag movement occurs over an element
@@ -167,18 +204,13 @@
       function handleDrop(ev) {
         console.log("dropping");
         ev.preventDefault();
-
         $node = $(ev.target);  // ev.target refers to the element being dropped on
+        
         $node.attr('contenteditable', true);
         $node.text('start typing here');
-        $node.addClass("dropped-text");
+        $node.addClass("text_element_input");
         var offset = $node.width() - 36 - 10;  // sprite width is 36px and sprite image horizontal offset is 10px
-        $node.css("background-position", offset + "px -11px");
-
-
-        // var data = ev.dataTransfer.getData('text');  
-        // console.log(data);
-        // ev.target.innerHTML = ev.dataTransfer.getData('text/html');
+        $node.css("background-position", offset + "px -11px");  // dynamically choose background position based on pixel width of users' child nodes
       }
     </script>
 
@@ -251,20 +283,9 @@
           <hr>
           <!-- Current webpage section -->
           <div class="hoverzone" ondragenter="handleDragEnter(event)" ondragleave="handleDragLeave(event)" ondragover="handleDragOver(event)">
-            <!-- ondrop="handleDrop(event)" -->
+            <!-- ondrop="handleDrop(event)"  no longer needed as child nodes handle drop events-->
             TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT 
             TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT 
-
-
-
-<!--             TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT 
-            TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT 
-            TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT 
-            TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT 
-            TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT 
-            TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT 
-            TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT 
-            TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT -->
           </div>
         </div>
       </div>
