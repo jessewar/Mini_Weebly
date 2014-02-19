@@ -32,7 +32,7 @@
 
     <style>
     .hoverzone {
-      border: 2px solid #aaaaaa;
+     /* border: 2px solid #aaaaaa;*/
       height: 100px;
       width: 1000px;
     }
@@ -54,8 +54,6 @@
     .gridlines {
       border-left: 4px dashed aqua;
     }
-
-
     </style>
 
     <script>
@@ -66,114 +64,133 @@
       });
     </script>
 
-
     <script>
-      function createChild(content) {
-        var $child = $("<div class='child'></div>");
-        if (content !== null) {
-          $child.text(content);
-        }
-        return $child
-      }
-
-      // Returns whether or not the event occurred in the left or right side of the parent element
-      function isLeftSide(ev) {
-        var $node = $(ev.target);
-        var offsetX = $node.offset().left;
-        var relX = ev.originalEvent.pageX - offsetX;  // X position relative to containing element
-        var middleX = $node.width() / 2; 
-        if (relX < middleX) {  // left side
-          return true; 
-        }
-        else {  // right side 
-          return false; 
-        }
-      }
-
-      // Add a dragstart event handler to each of the element icons
-      function addDnDAttributesTools() {
-        var $text = $("#text");
-        // Called a single time when a draggable element starts being dragged
-        $text.on('dragstart', function(ev) {
-          console.log("drag start");
-          ev.target.style.opacity = '0.4';  // ev.target refers to the element being dragged
-        });
-      }
-
-
-      function addDnDAttributesParent($parent) {
-        // add handler for dragenter
-        $parent.on('dragenter', function(ev) {
-          ev.preventDefault();
-          console.log("called from HOVERZONE: drag enter " + ev.target.classList);
-          var $node = $(ev.target);  // ev.target refers to the element being dragged over
-          if ($node.hasClass('hoverzone')) {  // prevent recursive splitting of children of the hoverzone
-            removeDndAttributes($node);  
-            var content = $node.text();  
-            var inLeft = isLeftSide(ev);
-            var $leftChild;
-            var $rightChild;
-            if (inLeft) {
-              $leftChild = createChild();
-              addDnDAttributesChild($leftChild);  // add DnD event handlers for the empty child
-              $rightChild = createChild(content);
-            } else {
-              $leftChild = createChild(content);
-              $rightChild = createChild();
-              addDnDAttributesChild($rightChild);  // add DnD event handlers for the empty child
+        /*
+            Creates a jQuery div with the 'child' class and optional text content
+        */
+        function createChild(content) {
+            var $child = $("<div class='child'></div>");
+            if (content !== null) {
+                $child.text(content);
             }
-            $rightChild.addClass("gridlines");  
-            $node.text('');
-            $node.append($leftChild);
-            $node.append($rightChild);
-          }
-        }); 
-
-        // add handler for dragover
-        $parent.on('dragover', function(ev) {
-          ev.preventDefault();
-        });
-      }
-
-      function addDnDAttributesChild($node) {
-        // add dragover handler for child node
-        // called every time a drag movement occurs over an elemen
-        $node.on('dragover', function(ev) {
-          ev.preventDefault();
-        });
-
-        // called a single time when the dragged element leaves the hoverzone
-        $node.on('dragleave', function(ev) {
-          console.log("drag leave " + ev.target.classList);
-          ev.preventDefault();
-          var $node = $(ev.target);  // the child node that the drag has just left
-          var $sibling = $node.siblings();  // the child node that contains the text content
-          $(ev.target).parent().children().removeClass('gridlines');
-          var $node = $(ev.target).parent();
-          $node.children().remove();
-        });
-
-        // add drop handler for child node
-        $node.on('drop', function(ev) {
-          console.log("dropping");
-          ev.preventDefault();
-          $node = $(ev.target);  // ev.target refers to the element being dropped on
-          $node.attr('contenteditable', true);
-          $node.text('start typing here');
-          $node.addClass("text_element_input");
-          var offset = $node.width() - 36 - 10;  // sprite width is 36px and sprite image horizontal offset is 10px
-          $node.css("background-position", offset + "px -11px");  // dynamically choose background position based on pixel width of users' child nodes
-        });
-      }
-
-      // remove all DnD event handlers on node
-      function removeDndAttributes(node) {
-        if (node !== null) {
-          $(node).off();
+            return $child
         }
-      }
-    </script>
 
+        // Returns whether or not the event occurred in the left or right side of the parent element
+        function isLeftSide(ev) {
+            var $node = $(ev.target);
+            var offsetX = $node.offset().left;
+            var relX = ev.originalEvent.pageX - offsetX; // X position relative to containing element
+            var middleX = $node.width() / 2;
+            if (relX < middleX) { // left side
+                return true;
+            } else { // right side 
+                return false;
+            }
+        }
+
+        /*
+            Add a dragstart event handler to each of the element icons
+            TODO: add handler to each icon
+        */
+        function addDnDAttributesTools() {
+            var $text = $("#text");
+            // Called a single time when a draggable element starts being dragged
+            $text.on('dragstart', function (ev) {
+                console.log("drag start");
+                ev.target.style.opacity = '0.4'; // ev.target refers to the element being dragged
+            });
+        }
+
+        /* 
+            Add drag and drop attributes for a parent text node
+        */
+        function addDnDAttributesParent($parent) {
+            // add handler for dragenter
+            $parent.on('dragenter', function (ev) {
+                ev.preventDefault();
+                console.log("called from HOVERZONE: drag enter " + ev.target.classList);
+                var $node = $(ev.target); // ev.target refers to the element being dragged over
+                removeDndAttributes($node);
+                var content = $node.text();
+                var inLeft = isLeftSide(ev);
+                var $leftChild;
+                var $rightChild;
+                if (inLeft) {
+                    $leftChild = createChild();
+                    addDnDAttributesChild($leftChild); // add DnD event handlers for the empty child
+                    $rightChild = createChild(content);
+                } else {
+                    $leftChild = createChild(content);
+                    $rightChild = createChild();
+                    addDnDAttributesChild($rightChild); // add DnD event handlers for the empty child
+                }
+                $rightChild.addClass("gridlines");
+                $node.text('');
+                $node.append($leftChild);
+                $node.append($rightChild);
+            });
+
+            // add handler for dragover
+            $parent.on('dragover', function (ev) {
+                ev.preventDefault();
+            });
+        }
+
+        /*
+            Add drag and drop attributes for an empty child text node
+        */
+        function addDnDAttributesChild($node) {
+            // add dragover handler for child node
+            // called every time a drag movement occurs over an element
+            $node.on('dragover', function (ev) {
+                ev.preventDefault();
+            });
+
+            // called a single time when the dragged element leaves the hoverzone
+            $node.on('dragleave', function (ev) {
+                console.log("drag leave " + ev.target.classList);
+                ev.preventDefault();
+                var $node = $(ev.target); // the child node that the drag has just left
+                var $parent = $node.parent();
+                var $sibling = $node.siblings(); // the child node that contains the text content
+                var content = $sibling.text();
+                $node.remove();
+                $sibling.remove()
+                $parent.text(content);
+                addDnDAttributesParent($parent);
+            });
+
+            // add drop handler for child node
+            $node.on('drop', function (ev) {
+                console.log("dropping");
+                ev.preventDefault();
+                $node = $(ev.target); // ev.target refers to the element being dropped on
+                var offset = $node.width() - 36 - 10; // sprite width is 36px and sprite image horizontal offset is 10px
+                $node.attr('contenteditable', true);
+                $node.text('start typing here');
+                $node.addClass("text_element_input");
+                $node.parent().children().removeClass('gridlines'); // remove grid lines from both nodes (bc right node always has gridlines)
+                $node.css("background-position", offset + "px -11px"); // dynamically choose background position based on pixel width of users' child nodes
+                // add mouse events for the editable node
+                $node.on('mouseleave', function (ev) {
+                    $node.removeClass("text_element_input");
+                });
+                $node.on('mouseenter', function (ev) {
+                    $node.addClass("text_element_input");
+                });
+            });
+        }
+
+        /*
+            Remove all drag and drop elements from the given node
+        */
+        function removeDndAttributes(node) {
+            if (node !== null) {
+                $(node).off();
+            }
+        }
+    </script>
   </head>
   
   <body>
