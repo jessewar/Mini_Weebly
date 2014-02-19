@@ -13,8 +13,8 @@
     <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
 
-    <!-- My custom CSS files 
-    <link href="public/css/index.css" rel="stylesheet"> -->
+    <!-- My custom CSS files -->
+    <link href="public/css/index.css" rel="stylesheet"> 
 
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"
@@ -26,9 +26,9 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    <!-- <script src="public/js/jquery.iconfield-master/jquery.iconfield.js"></script> 
+    <script src="public/js/jquery.iconfield-master/jquery.iconfield.js"></script> 
 
-    <script src="public/js/main.js"></script> -->
+    <script src="public/js/main.js"></script>
 
     <style>
     .hoverzone {
@@ -59,101 +59,33 @@
     </style>
 
     <script>
-      // get "+" icon for new page input area
-      // TODO: Make only the icon a button
       $(function() {
         addDnDAttributesParent($(".hoverzone"));
         addDnDAttributesTools();
-
-        // var $newPageInput = $('#new-page-input');
-
-        // // put icon in page name input
-        // $newPageInput.iconfield({
-        //   'image-url' : 'public/imgs/search.jpg',
-        //   'horizontal-padding' : 10, // TODO: see if this causes an issue for different screen sizes
-        //   'left' : false
-        // });
-
-        // // handle new page creation
-        // $newPageInput.on('click', function(e) {
-        //   var pageName = $newPageInput.val();
-        //   if (pageName !== "") {
-        //     // generate new page label with every new page creation
-        //     var $pageList = $('#pages');
-        //     var pageListElement = "<li><h3><a href='#' class='btn btn-default page-button'>" + pageName + "</a></h3></li>";
-        //     $pageList.append(pageListElement);
-
-        //     // generate new page template item every new page creation
-        //     var pageTemplateItem = "<span class='label label-default page-template'>" + pageName + "</span>";
-        //     $newPageInput.before(pageTemplateItem);
-        //     $newPageInput.val("");
-        //   }
-        // });
 
       });
     </script>
 
 
     <script>
-
-      function createTextChild(content) {
-        var $child = $("<div>" + content + "</div>");
-        $child.addClass("child");
-
-        return $child;
+      function createChild(content) {
+        var $child = $("<div class='child'></div>");
+        if (content !== null) {
+          $child.text(content);
+        }
+        return $child
       }
-
-      function createEmptyChild() {
-        var $child = $("<div></div>");
-        $child.addClass("child");
-
-        return $child;
-      }
-
-      // called a single time when something is dragged into the hoverzone
-      // function handleDragEnter(ev) {
-      //   ev.preventDefault();
-      //   var $node = $(ev.target);  // ev.target refers to the element being dragged over
-
-      //   console.log("called from HOVERZONE: drag enter " + ev.target.classList);
-
-      //   if ($node.hasClass('hoverzone')) {  // prevent recursive splitting of children of the hoverzone
-      //     // removeDndAttributes($node);  // this doesn't seem to do anything
-
-      //     var content = $node.text();  
-      //     var inLeft = isLeftSide(ev);
-
-      //     var $leftChild;
-      //     var $rightChild;
-
-      //     if (inLeft) {
-      //       $leftChild = createEmptyChild();
-      //       $rightChild = createTextChild(content);
-      //     } else {
-      //       $leftChild = createTextChild(content);
-      //       $rightChild = createEmptyChild();
-      //     }
-      //     $rightChild.addClass("gridlines");  
-      //     $node.text('');
-
-      //     $node.append($leftChild);
-      //     $node.append($rightChild);
-      //   }
-      //}
 
       // Returns whether or not the event occurred in the left or right side of the parent element
       function isLeftSide(ev) {
         var $node = $(ev.target);
-       
-        var offset = $node.offset();
-        var relX = ev.originalEvent.pageX - offset.left;  // X position relative to containing element
-        var relY = ev.originalEvent.pageY - offset.top;  // Y position relative to containing element
+        var offsetX = $node.offset().left;
+        var relX = ev.originalEvent.pageX - offsetX;  // X position relative to containing element
         var middleX = $node.width() / 2; 
-
-        if (relX < middleX) {
+        if (relX < middleX) {  // left side
           return true; 
         }
-        else { 
+        else {  // right side 
           return false; 
         }
       }
@@ -163,7 +95,6 @@
         var $text = $("#text");
         // Called a single time when a draggable element starts being dragged
         $text.on('dragstart', function(ev) {
-          console.log(ev);
           console.log("drag start");
           ev.target.style.opacity = '0.4';  // ev.target refers to the element being dragged
         });
@@ -176,38 +107,37 @@
           ev.preventDefault();
           console.log("called from HOVERZONE: drag enter " + ev.target.classList);
           var $node = $(ev.target);  // ev.target refers to the element being dragged over
-
           if ($node.hasClass('hoverzone')) {  // prevent recursive splitting of children of the hoverzone
-             removeDndAttributes($node);  // this doesn't seem to do anything
-
+            removeDndAttributes($node);  
             var content = $node.text();  
             var inLeft = isLeftSide(ev);
-
             var $leftChild;
             var $rightChild;
-
             if (inLeft) {
-              $leftChild = createEmptyChild();
-              addDnDAttributesChild($leftChild);
-              $rightChild = createTextChild(content);
+              $leftChild = createChild();
+              addDnDAttributesChild($leftChild);  // add DnD event handlers for the empty child
+              $rightChild = createChild(content);
             } else {
-              $leftChild = createTextChild(content);
-              $rightChild = createEmptyChild();
-              addDnDAttributesChild($rightChild);
+              $leftChild = createChild(content);
+              $rightChild = createChild();
+              addDnDAttributesChild($rightChild);  // add DnD event handlers for the empty child
             }
             $rightChild.addClass("gridlines");  
             $node.text('');
-
             $node.append($leftChild);
             $node.append($rightChild);
           }
         }); 
 
         // add handler for dragover
+        $parent.on('dragover', function(ev) {
+          ev.preventDefault();
+        });
       }
 
       function addDnDAttributesChild($node) {
-        // called every time a drag movement occurs over an element
+        // add dragover handler for child node
+        // called every time a drag movement occurs over an elemen
         $node.on('dragover', function(ev) {
           ev.preventDefault();
         });
@@ -216,20 +146,18 @@
         $node.on('dragleave', function(ev) {
           console.log("drag leave " + ev.target.classList);
           ev.preventDefault();
-
+          var $node = $(ev.target);  // the child node that the drag has just left
+          var $sibling = $node.siblings();  // the child node that contains the text content
           $(ev.target).parent().children().removeClass('gridlines');
-
           var $node = $(ev.target).parent();
-
           $node.children().remove();
         });
 
-        // called when dropping
+        // add drop handler for child node
         $node.on('drop', function(ev) {
           console.log("dropping");
           ev.preventDefault();
           $node = $(ev.target);  // ev.target refers to the element being dropped on
-          
           $node.attr('contenteditable', true);
           $node.text('start typing here');
           $node.addClass("text_element_input");
@@ -238,46 +166,12 @@
         });
       }
 
+      // remove all DnD event handlers on node
       function removeDndAttributes(node) {
         if (node !== null) {
           $(node).off();
-
-          // $(node).off("ondragenter");
-          // $(node).off("ondragleave");
-          // $(node).off("ondragover");
         }
       }
-    </script>
-
-    <script>
-      // // called a single time when the dragged element leaves the hoverzone
-      // function handleDragLeave(ev) {
-      //   console.log("drag leave " + ev.target.classList);
-      //   ev.preventDefault();
-
-      //   // $(ev.target).children().removeClass('gridlines');
-
-      //   // var $node = $(ev.target);
-
-      //   // $node.children().remove();
-      // }
-
-      // // called every time a drag movement occurs over an element
-      // function handleDragOver(ev) {
-      //   ev.preventDefault();
-      // }
-
-      // function handleDrop(ev) {
-      //   console.log("dropping");
-      //   ev.preventDefault();
-      //   $node = $(ev.target);  // ev.target refers to the element being dropped on
-        
-      //   $node.attr('contenteditable', true);
-      //   $node.text('start typing here');
-      //   $node.addClass("text_element_input");
-      //   var offset = $node.width() - 36 - 10;  // sprite width is 36px and sprite image horizontal offset is 10px
-      //   $node.css("background-position", offset + "px -11px");  // dynamically choose background position based on pixel width of users' child nodes
-      // }
     </script>
 
   </head>
