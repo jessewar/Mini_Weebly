@@ -76,7 +76,9 @@
             return $child
         }
 
-        // Returns whether or not the event occurred in the left or right side of the parent element
+        /*
+            Returns whether or not the event occurred in the left or right side of the parent element
+        */
         function isLeftSide(ev) {
             var $node = $(ev.target);
             var offsetX = $node.offset().left;
